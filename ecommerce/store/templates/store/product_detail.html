@@ -1,0 +1,71 @@
+{% extends 'store/main.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="row py-5">
+        <div class="col-lg-6">
+            <img class="thumbnail-p  rounded border-dark" src="{{ product.imageURL }}">
+        </div>
+        <div class="col-lg-6 p-5">
+            <h2 class="mb-5">{{ product.name }}</h2>
+            <h4>Price : ${{ product.price|floatformat:2 }}</h4>
+            <p class="mb-5 pb-5 mt-1">Useful For : {{ product.description }}</p>
+
+            
+            {% if ordered %}
+            <a href="{% url 'submit_review' product_id=product.id %}" class="btn btn-outline-success rounded mt-5">Give
+                Review</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <hr>
+    <h3 class="">Reviews</h3>
+    {% for review in reviews %}
+    <div class="review container-fluid">
+        <div class="row">
+            <div class="col-lg-2 d-flex justify-content-center align-items-center">
+                <img class="review-img" src="{{review.customer.imageURL}}" alt="">
+            </div>
+            <div class="col-lg-10">
+                <h5 class="capitalize">{{ review.customer.name }}</h5>
+                <p>{{ review.comment }}</p>
+                <h5>Rating : <span class="bg-warning rounded p-1">{{review.rating}} - Stars</span></h5>
+                <small>{{ review.date_added }}</small>
+            </div>
+        </div>
+    </div>
+    <hr>
+    {% endfor %}
+</div>
+
+<script type="text/javascript">
+    var csrftoken = '{{ csrf_token }}';
+
+    document.querySelectorAll('.add-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            var productId = this.dataset.product;
+            var action = this.dataset.action;
+            console.log('productId:', productId, 'Action:', action);
+
+            var url = '/update_item/';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                body: JSON.stringify({ 'productId': productId, 'action': action })
+            })
+                .then(response => {
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('data:', data);
+                    location.reload();
+                });
+        });
+    });
+</script>
+{% endblock content %}

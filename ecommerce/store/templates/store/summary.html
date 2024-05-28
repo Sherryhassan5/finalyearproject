@@ -1,0 +1,41 @@
+{% extends "store/main.html" %}
+{% load static %}
+{% block content %}
+
+
+<div class="py-5 text-center my-5">
+    <table class="table table-bordered rounded">
+        <tr>
+            <th scope="row">Summary of {{product_name}} Reviews</th>
+            <td class="wide-column2">{{summary}}</td>
+        </tr>
+    </table>
+</div>
+
+<div class="container text-center">
+    <a href="{% url 'search_product' %}">Search for Another Product</a>
+</div>
+
+<div class="container text-center p-5">
+    <p class="text-center" id="review-text"></p>
+    <button class="btn btn-outline-success" id="show-hide">Show Reviews</button>
+</div>
+
+<script>
+    let showHide = document.getElementById("show-hide");
+    let reviewText = document.getElementById("review-text");
+    showHide.addEventListener('click', (e) => {
+        if (reviewText.innerHTML == "") {
+            reviewText.innerHTML = `{{text}}`;
+            showHide.innerHTML = 'Hide Reviews';
+            console.log("hide")
+        }
+        else{
+            reviewText.innerHTML = "";
+            showHide.innerHTML = 'Show Reviews';
+        }
+    });
+</script>
+
+
+{% endblock content %}

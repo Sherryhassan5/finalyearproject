@@ -1,0 +1,26 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<div class="d-flex justify-content-center ">
+    <div>
+        <h1 class="text-center my-5">What would you like to do?</h1>
+        <!-- <p class="text-center mx-5 px-5 mb-5">
+            Please note that while our AI model is highly accurate, errors and omissions are possible. 
+            By proceeding, you acknowledge that you will not take any legal action based on the AI's skin type prediction.
+        </p> -->
+        <p class="text-center" style="margin: 20px; font-size: 1.1em;">
+            Please be advised that while our AI model for predicting skin type has been developed with a high degree of accuracy, there remains the possibility of errors and omissions. 
+            The predictions provided by this model should not be considered as definitive or as a substitute for professional medical advice. 
+            By proceeding with the AI skin type prediction, you acknowledge and accept that the results are based on probabilistic modeling and that there are inherent limitations.
+        </p>
+        
+        <p class="text-center" style="margin: 20px; font-size: 1.1em;">
+            Furthermore, you agree that you will not hold our company legally responsible for any decisions or actions taken based on the AI's prediction. 
+            It is your responsibility to consult with a qualified healthcare provider to interpret and validate the results provided by the AI model.
+        </p>
+        <a href="{% url 'prediction_page' %}" class="btn-custom text-center d-block">Predict Skin Type</a>
+        <br>
+        <a href="/" class="btn-custom text-center d-block">Cancel</a>
+    </div>
+</div>
+{% endblock content %}

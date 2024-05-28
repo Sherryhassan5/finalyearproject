@@ -1,0 +1,56 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+
+
+
+<div class="row px-5 cat-store">
+	<div class="col-lg-12 text-center">
+		<h1 class="poster4">Categories</h1>
+	</div>
+	{% for category in category %}
+	<div class="col-lg-3  col-md-4 col-sm-6 col-6 p-4 cat-store-p">
+		<a href="{% url 'storeCat' id=category.id %}"
+			class="thumbnail custom-link rounded-circle d-flex justify-content-center align-items-end mt-2"><img
+				class="thumbnail rounded-circle" src="{{category.catImageURL}}" style="position: absolute;z-index: -1;">
+			{{category.name}}</a>
+
+	</div>
+	{% endfor %}
+	<div class="col-lg-3 col-md-4 col-sm-6 col-6 p-4 cat-store-p">
+		<a href="{% url 'store' %}"
+			class="thumbnail custom-link rounded-circle d-flex justify-content-center align-items-center mt-2"
+			style="line-height: 1; text-align: center;">
+			<img
+				class="thumbnail rounded-circle" src="{% static 'images/white.jpeg' %}" style="position: absolute;z-index: -1;">All Categories</a>
+
+	</div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <h1 class="poster4">Products</h1>
+    </div>
+    {% for product in products %}
+    <div class="col-xl-4 col-lg-6 col-md-6 col-12">
+        <img class="thumbnail" src="{{product.imageURL}}">
+        <div class="box-element product">
+            <h6><strong><a href="{% url 'product_detail' product_id=product.id %}">{{ product.name }}</a></strong></h6>
+            
+            <hr>
+
+            <button data-product="{{product.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart rounded">Add to Cart</button>
+
+            <!-- Only show the "Give Review" button if the product has been ordered by the customer -->
+            {% if product.id in ordered_product_ids %}
+            <a href="{% url 'submit_review' product_id=product.id %}" class="btn btn-outline-success rounded">Give Review</a>
+            {% endif %}
+            
+            <h4 style="float: right;"><strong>${{product.price|floatformat:2}}</strong></h4>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+{% endblock content %}

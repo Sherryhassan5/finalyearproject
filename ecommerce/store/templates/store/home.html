@@ -1,0 +1,210 @@
+{% extends 'store/main.html'%}
+{% load static %}
+{% block content %}
+
+
+<div class="poster">
+    <p class="posterchild poster1">The New</p>
+    <p class="posterchild poster2">AI</p>
+    <p class="posterchild poster3">Skin Care</p>
+    <img src="{% static 'images/star3.png' %}" alt="" class="star3">
+    <p class="posterchild poster4">Essentials</p>
+</div>
+
+
+<div class="banner">
+    <img src="{% static 'images/image24.png' %}" alt="" class="banner-img-left">
+    <img src="{% static 'images/star3.png' %}" alt="" class="star1">
+    <img src="{% static 'images/star3.png' %}" alt="" class="star2">
+    <img src="{% static 'images/image23.png' %}" alt="" class="banner-img-center">
+    <img src="{% static 'images/image25.png' %}" alt="" class="banner-img-right">
+    <a href="#" class="small-link">WATCH REVIEWS</a>
+
+
+    <div class="banner-text-box">
+        <p class="banner-heading">
+            Hey. Hi. Hello
+        </p>
+        <p class="banner-small">
+            WE’RE SKEEN YOUR SKIN PROTECTOR
+        </p>
+        <a href="{% url 'suggested-products' %}" class="banner-link">
+            <p class="banner-link-first">SUITABLE</p>
+            <p class="banner-link-middle">THINGS FOR</p>
+            <p class="banner-link-last">YOUR SKIN<img src="{% static 'images/frame233.png' %}" alt=""></p>
+        </a>
+    </div>
+    <img src="{% static 'images/flowers.png' %}" alt="" class="flowers">
+
+</div>
+
+<div class="skin-rec">
+    <p class="skin-rec-text">EXPLORE YOUR SKIN TO GET THE BEST SUITABLE PRODUCTS</p>
+    <div class="m-4"><img src="{% static 'images/star3.png' %}" alt=""></div>
+    <a href="{% url 'capture-image' %}" class="skin-rec-link">EXPLORE YOUR SKIN <img src="{% static 'images/faceicon.png' %}" alt=""
+            height="30px" width="30px"></a>
+</div>
+
+
+<div class="row px-5">
+    <div class="col-6 image-cover image-cover-hidable">
+        <img src="{% static 'images/image299.jpg' %}" alt="" class="border-class">
+    </div>
+    <div class="col-6 image-cover image-cover-hidable">
+        <img src="{% static 'images/image2.png' %}" alt="" class="border-class">
+    </div>
+</div>
+
+<div class="px-5 mt-5 row image-cover">
+    <img src="{% static 'images/ai-skin.jpg'%}" alt="" class="col-12 border-class">
+</div>
+
+<div class="row px-5 mt-5 image-cover-hidable">
+    <div class="col-6 image-cover image-cover-desc">
+        <a href="#" class="image-cover-learn-link">LEARN MORE</a>
+        <a href="{% url 'store' %}" class="image-cover-shop-link"><img src="{%static 'images/button.png'%}" alt="" height="90px"
+                width="450px" class="mt-5 ml-2 button-img"></a>
+    </div>
+    <div class="col-6 image-cover ">
+        <img src="{% static 'images/image-male.png' %}" alt="" class="border-class">
+    </div>
+</div>
+
+
+
+
+
+<div class="products-section">
+    {% for product in products %}
+
+    {% if product.name == "beard oil" %}
+    {% with beard_oil=product %}
+    <div class="product-item product-item-1">
+        <img src="{{beard_oil.imageURL}}" alt="" height="85%" width="100%">
+        <div class="product-desc">
+            <div class"product-desc-1">
+                <p class="product-name mb-1">{{beard_oil.name}}</p>
+                <p class="product-price">${{beard_oil.price}}</p>
+            </div>
+            <button class="product-add bg-success update-cart" data-product="{{beard_oil.id}}"
+                data-action="add">Add to Cart</button>
+        </div>
+    </div>
+    {% endwith %}
+    {% elif product.name == "Whitening Facewash" %}
+    {% with facewash=product %}
+    <div class="product-item product-item-2">
+        <img src="{{facewash.imageURL}}" alt="" height="71%" width="100%">
+        <div class="product-desc">
+            <div class"product-desc-1">
+                <p class="product-name mb-1">{{facewash.name}}</p>
+                <p class="product-price">${{facewash.price}}</p>
+            </div>
+            <button class="product-add bg-success update-cart" data-product="{{facewash.id}}"
+                data-action="add">Add to Cart</button>
+        </div>
+    </div>
+    {% endwith %}
+    {% elif product.name == "Cleansing Cream" %}
+    {% with cleansing=product %}
+    <div class="product-item product-item-3">
+        <img src="{{cleansing.imageURL}}" alt="" height="71%" width="100%" style="border-radius: 1.3rem;">
+        <div class="product-desc">
+            <div class"product-desc-1">
+                <p class="product-name mb-1">{{cleansing.name}}</p>
+                <p class="product-price">${{cleansing.price}}</p>
+            </div>
+            <button class="product-add bg-success update-cart" data-product="{{cleansing.id}}"
+                data-action="add">Add to Cart</button>
+        </div>
+    </div>
+    {% endwith %}
+    {% elif product.name == "Facial Scrub" %}
+    {% with facial=product %}
+    <div class="product-item product-item-4">
+        <img src="{{facial.imageURL}}" alt="" height="75%" width="100%" style="border-radius: 1.3rem;">
+        <div class="product-desc">
+            <div class"product-desc-1">
+                <p class="product-name mb-1">{{facial.name}}</p>
+                <p class="product-price">${{facial.price}}</p>
+            </div>
+            <button class="product-add bg-success update-cart" data-product="{{facial.id}}"
+                data-action="add">Add to Cart</button>
+        </div>
+    </div>
+    {% endwith %}
+
+    {% elif product.name == "Vitamin C Serum" %}
+    {% with c=product %}
+    <div class="product-item product-item-5">
+        <img src="{{c.imageURL}}" alt="" height="85%" width="100%" style="border-radius: 1.3rem;">
+        <div class="product-desc">
+            <div class"product-desc-1">
+                <p class="product-name mb-1">{{c.name}}</p>
+                <p class="product-price">{{c.price}}</p>
+            </div>
+            <button class="product-add bg-success update-cart" data-product="{{c.id}}" data-action="add">Add to
+                Cart</button>
+        </div>
+    </div>
+    {% endwith %}
+    {% elif product.name == "Night Cream" %}
+    {% with night=product %}
+    <div class="product-item product-item-6">
+        <img src="{{night.imageURL}}" alt="" height="75%" width="100%" style="border-radius: 1.3rem;">
+        <div class="product-desc">
+            <div class"product-desc-1">
+                <p class="product-name mb-1">{{night.name}}</p>
+                <p class="product-price">${{night.price}}</p>
+            </div>
+            <button class="product-add bg-success update-cart" data-product="{{night.id}}"
+                data-action="add">Add to Cart</button>
+        </div>
+    </div>
+    {% endwith %}
+
+    {% elif product.name == "Facewash" %}
+    {% with face=product %}
+    <div class="product-item product-item-7">
+        <img src="{{face.imageURL}}" alt="" height="90%" width="100%">
+        <div class="product-desc">
+            <div class"product-desc-1">
+                <p class="product-name mb-1">{{face.name}}</p>
+                <p class="product-price">${{face.price}}</p>
+            </div>
+            <button class="product-add bg-success update-cart" data-product="{{face.id}}" data-action="add">Add
+                to Cart</button>
+        </div>
+    </div>
+    {% endwith %}
+    {% endif %}
+    {% endfor %}
+</div>
+
+
+<div class="container text-center">
+    <a href="{% url 'store' %}" class="link-shop">GO TO SHOP</a>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}

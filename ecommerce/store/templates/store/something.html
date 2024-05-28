@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Element Movement</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .outside {
+            background-color: lightblue;
+            padding: 10px;
+        }
+        .inside {
+            background-color: lightgreen;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="outside" id="element">
+        This element will move into the container.
+    </div>
+    <div class="container" id="container">
+        <p>This is the container div.</p>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function moveElement() {
+            const element = document.getElementById('element');
+            const container = document.getElementById('container');
+
+            if (window.matchMedia('(min-width: 768px)').matches) {
+                // Move the element inside the container
+                if (!container.contains(element)) {
+                    container.appendChild(element);
+                    element.classList.remove('outside');
+                    element.classList.add('inside');
+                }
+            } else {
+                // Move the element outside the container
+                if (container.contains(element)) {
+                    document.body.insertBefore(element, container);
+                    element.classList.remove('inside');
+                    element.classList.add('outside');
+                }
+            }
+        }
+
+        // Execute on load
+        window.onload = moveElement;
+        // Execute on resize
+        window.onresize = moveElement;
+    </script>
+</body>
+</html>

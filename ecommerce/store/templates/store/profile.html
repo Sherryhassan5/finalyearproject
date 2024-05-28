@@ -1,0 +1,217 @@
+{% extends 'store/main.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="page-content page-container" id="page-content">
+    <div class="padding">
+        <div class="row d-flex justify-content-center">
+            <div class="col-xl-12 col-md-12">
+                <div class="card user-card-full">
+                    <div class="row m-l-0 m-r-0">
+                        <div class="col-lg-4 bg-c-lite-green user-profile">
+                            <div class="card-block text-center text-white">
+                                <div class="m-b-25">
+                                    <img src="{{customer.imageURL}}" class="img-radius"
+                                        alt="User-Profile-Image" height="250px" width="250px">
+                                </div>
+                                <h6 class="f-w-600">{{user.first_name}}&nbsp{{user.last_name}}</h6>
+                                <p>{{user.username}}</p>
+                                <i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16"></i>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="card-block">
+                                <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Information</h6>
+                                <div class="row mb-3">
+                                    <div class="col-sm-6">
+                                        <p class="m-b-10 f-w-600">Username</p>
+                                        <h6 class="text-muted f-w-400">{{user.username}}</h6>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="m-b-10 f-w-600">Email</p>
+                                        <h6 class="text-muted f-w-400">{{user.email}}</h6>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-10">
+                                        <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">Shopping History</h6>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button class="btn btn-outline-success rounded mt-1 f-w-600" id="OrderToggler">Show</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <table class="table table-bordered hide" id="orderTable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="m-b-10 f-w-600">Order ID</th>
+                                                <th scope="col" class="m-b-10 f-w-600 wide-column1">Product</th>
+                                                <th scope="col" class="m-b-10 f-w-600">Quantity</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for order_with_items in orders_with_items %}
+                                                {% for item in order_with_items.items %}
+                                                <tr class="{% if not order_with_items.order.complete %}table-warning{% endif %}">
+                                                        {% if forloop.first %}
+                                                            <th scope="row" class="text-muted f-w-400 align-middle" rowspan="{{ order_with_items.items|length }}">
+                                                                {{ order_with_items.order.id }}{% if not order_with_items.order.complete %}&nbsp<span class="badge text-white bg-success"> Current</span>{% endif %}
+                                                            </th>
+                                                        {% endif %}
+                                                        <td class="text-muted f-w-400 wide-column1">{{ item.product_name }}</td>
+                                                        <td class="text-muted f-w-400">{{ item.item.quantity }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    
+
+
+
+
+
+
+
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-sm-10">
+                                        <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600">My Feedback and Reviews</h6>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button class="btn btn-outline-success rounded mt-1 f-w-600" id="reviewToggler">Show</button>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+
+
+
+
+
+
+
+
+<!-- store/profile.html -->
+<table class="table table-bordered hide" id="reviewTable">
+    <thead>
+        <tr>
+            <th scope="col" class="m-b-10 f-w-600 short-c">Order ID</th>
+            <th scope="col" class="m-b-10 f-w-600">Product</th>
+            <th scope="col" class="m-b-10 f-w-600 wide-column">Review</th>
+            <th scope="col" class="m-b-10 f-w-600">Rating</th>
+            <th scope="col" class="m-b-10 f-w-600">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for review in reviews %}
+        <tr>
+            <td class="text-muted f-w-400 short-c">{{ review.order.id }}</td>
+            <td class="text-muted f-w-400">{{ review.product.name }}</td>
+            <td class="text-muted f-w-400 wide-column">{{ review.comment }}</td>
+            <td class="text-muted f-w-400">{{ review.rating }} stars</td>
+            <td class="text-muted f-w-400">
+                <!-- Button to trigger modal -->
+                <button type="button" class="btn btn-outline-primary rounded" data-toggle="modal" data-target="#editReviewModal{{ review.id }}">
+                    Edit
+                </button>
+
+                <!-- Modal for editing review -->
+                <div class="modal fade" id="editReviewModal{{ review.id }}" tabindex="-1" role="dialog" aria-labelledby="editReviewModalLabel{{ review.id }}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editReviewModalLabel{{ review.id }}">Edit Review</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="{% url 'profile' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="review_id" value="{{ review.id }}">
+                                    <div class="form-group">
+                                        <label for="id_rating">Rating:</label>
+                                        <input type="number" name="rating" id="id_rating" class="form-control" value="{{ review.rating }}" min="1" max="5">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_comment">Comment:</label>
+                                        <textarea name="comment" id="id_comment" class="form-control">{{ review.comment }}</textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+<script>
+    let togglerForOrder = document.getElementById("OrderToggler");
+    let orderTable = document.getElementById("orderTable");
+    let togglerForReview = document.getElementById("reviewToggler");
+    let reviewTable = document.getElementById("reviewTable")
+    togglerForOrder.addEventListener("click",(e)=>{
+        if (togglerForOrder.innerHTML == "Show") {
+            togglerForOrder.innerHTML = "Hide";
+            orderTable.style.display = "table";
+            console.log("show")
+        }
+        else{
+            togglerForOrder.innerHTML = "Show";
+            orderTable.style.display = "none";
+        }
+    });
+    togglerForReview.addEventListener("click",(e)=>{
+        if (togglerForReview.innerHTML == "Show") {
+            togglerForReview.innerHTML = "Hide";
+            reviewTable.style.display = "table";
+            console.log("show")
+        }
+        else{
+            togglerForReview.innerHTML = "Show";
+            reviewTable.style.display = "none";
+        }
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}

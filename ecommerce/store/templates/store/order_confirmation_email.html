@@ -1,0 +1,27 @@
+<!-- templates/store/order_confirmation_email.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+</head>
+<body>
+    <h1>Order Confirmation</h1>
+    <p>Hi {{ customer.name }},</p>
+    <p>Thank you for your order! Here are the details of your order:</p>
+    <p><strong>Order Number:</strong> {{ order.id }}</p>
+    <p><strong>Transaction ID:</strong> {{ order.transaction_id }}</p>
+    <p><strong>Order Items:</strong></p>
+    <ul>
+        {% for item in order.orderitem_set.all %}
+            <li>{{ item.product.name }} - Quantity: {{ item.quantity }} - Price: ${{ item.product.price }}</li>
+        {% endfor %}
+    </ul>
+    <p><strong>Total Price:</strong> ${{ order.get_cart_total }}</p>
+    <p><strong>Order Complete:</strong> {{ order.complete }}</p>
+    <p>You will receive your order within 24 hours.</p>
+    <p>Thank you for shopping with us!</p>
+</body>
+</html>

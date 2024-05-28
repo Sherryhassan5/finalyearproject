@@ -1,0 +1,89 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<div class="alert alert-danger alert-dismissible fade show my-3" role="alert" id="alert-dis">
+    <strong>Hello {{user.first_name}}</strong> To ensure the highest accuracy in predicting your skin type, please follow these instructions carefully when capturing an image of the affected area:
+    <ul class="text-left" style="font-size: 1rem;">
+        <li>Wash the skin area thoroughly with mild soap and water to remove any dirt, oil, or makeup.</li>
+        <li>Pat the skin dry with a clean towel. Ensure the skin is completely dry before taking the picture.</li>
+        <li>Choose a well-lit environment, preferably with natural light, to avoid shadows and ensure the skin's color and texture are accurately captured.</li>
+        <li>Hold the camera or smartphone steady and as close as possible to the skin area you want to analyze. Ensure that the affected area fills the frame with minimal background.</li>
+        <li>Avoid including any unnecessary background in the image. Focus solely on the skin area of interest.</li>
+        <li>If possible, use a plain background (e.g., a white wall) to minimize distractions and improve the model's focus on the skin area.</li>
+        <li>Ensure the image is in focus and not blurry. If needed, take multiple shots to get a clear and sharp image.</li>
+        <li>Do not use any filters or photo editing tools that may alter the appearance of your skin in the image.</li>
+        <li>Remove any jewelry or accessories that might interfere with the visibility of the skin area.</li>
+    </ul>
+    <button type="button" class="btn-close btn-custom" data-bs-dismiss="alert" aria-label="Close" id="btn-close">&#x274c;</button>
+  </div>
+<h1 class="text-center bg-light py-4 rounded mt-3">Capture Image</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="text-center">{{ form.as_p }}</div>
+    <button type="submit" class="d-block m-auto btn-custom py-2 px-3">Upload</button>
+</form>
+<h1 class="text-center">OR</h1>
+<div class="videoCaptureDiv">
+    <video class="mt-2" id="video" width="100%" height="480" autoplay></video>
+    <button class="d-block m-auto btn-custom py-2 px-3" id="snap">Capture</button>
+    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+</div>
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const snap = document.getElementById('snap');
+    const context = canvas.getContext('2d');
+
+    // Get access to the camera
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
+            video.srcObject = stream;
+            video.play();
+        });
+    }
+
+    // Capture the photo
+    snap.addEventListener("click", function () {
+        context.drawImage(video, 0, 0, 640, 480);
+        const dataUrl = canvas.toDataURL('image/png');
+        // Create a form and submit the captured image
+        const form = new FormData();
+        form.append('image', dataURLtoBlob(dataUrl), 'capture.png');
+        fetch("", {
+            method: "POST",
+            body: form,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        }).then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            } else {
+                alert('Image upload failed');
+            }
+        });
+    });
+
+    // Convert data URL to Blob
+    function dataURLtoBlob(dataurl) {
+        const arr = dataurl.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+    }
+</script>
+<script>
+    let btnClose = document.getElementById("btn-close");
+    let alertDis = document.getElementById("alert-dis");
+    btnClose.addEventListener("click",(e)=>{
+        alertDis.style.display = "none";
+    });
+</script>
+
+
+{% endblock content %}

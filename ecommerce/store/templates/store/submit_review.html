@@ -1,0 +1,11 @@
+<!-- submit_review.html -->
+{% extends 'store/main.html' %}
+
+{% block content %}
+  <h2>Submit a Review for Order #{{ order.id }}</h2>
+  <form method="post" action="{% url 'submit_review' product.id %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit Review</button>
+  </form>
+{% endblock %}

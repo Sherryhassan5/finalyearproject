@@ -1,0 +1,74 @@
+{% extends "store/main.html" %}
+{% load static %}
+{% block content %}
+<div id="search-container" class="container p-5 my-5 text-center">
+    {% csrf_token %}
+    <input class="rounded p-2 bg-transparent border-success mr-3 w-75" type="text" id="product-name" placeholder="Enter Product Name">
+    <button class="btn btn-outline-success rounded px-3 py-2 mb-1" id="search-button">Search</button>
+    <p id="search-message"></p>
+</div>
+
+<script>
+
+
+
+    document.addEventListener('DOMContentLoaded', async function () {
+        const searchButton = document.getElementById('search-button');
+        const productNameInput = document.getElementById('product-name');
+        const searchMessage = document.getElementById('search-message');
+        console.log("fuck");
+        searchButton.addEventListener('click', async function () {
+            const productName = productNameInput.value;
+            console.log(productName)
+            js = JSON.stringify({ product_name: productName })
+            console.log(js)
+            try {
+                const response = await fetch('/search/product/', {
+                    method: 'POST',
+                    body: JSON.stringify({ product_name: productName }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    window.location.href = '/summary/' + data.product_id + '/';
+                } else {
+                    searchMessage.textContent = data.message;
+                }
+            } catch (error) {
+                console.error("Error searching product:", error);
+                searchMessage.textContent = "An error occurred during search.";
+            }
+        });
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+{% endblock content %}

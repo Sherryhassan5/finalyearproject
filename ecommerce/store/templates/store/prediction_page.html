@@ -1,0 +1,21 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<div class="d-flex justify-content-center ">
+    <div>
+        <h1 class="text-center mt-5">Result</h1>
+        <img src="{{ image_instance.image.url }}" alt="Captured Image">
+        <p class="text-center mt-2 p-2 rounded" style="background-color: #1c1b1946;font-size: 1.2rem;font-weight: 600;">Predicted class : {{ predicted_class }}</p>
+        <p class="text-center mt-2 p-2 rounded mb-5" style="background-color: #1c1b1946;font-size: 1.2rem;font-weight: 600;">Confidence: {{ confidence }}</p>
+        <!-- <a href="{% url 'suggest' %}" class="btn-custom text-center d-block mb-3">Get Suggestions</a> -->
+        <form action="{% url 'suggest' %}" method="POST">
+            {% csrf_token %}
+            <input type="text" id="skin_type" name="skin_type" value="{{ predicted_class }}" hidden>
+            <button class="btn-custom d-block m-auto" type="submit">GET SUGGESTED PRODUCTS FOR THIS PROBLEM</button>
+        </form>
+        <p class="text-center mt-4 mb-3">OR</p>
+        <a href="{% url 'capture-image' %}" class="btn-custom text-center d-block">Check again</a>
+    </div>
+    
+</div>
+{% endblock content %}
